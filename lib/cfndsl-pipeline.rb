@@ -16,16 +16,17 @@
 
 
 require 'fileutils'
-require 'json'
-require 'yaml'
-require 'open-uri'
+# require 'json'
+# require 'yaml'
+# require 'open-uri'
+
 
 module CfnDsl
   class Pipeline
-    @input_filename = 
-    @output_file nil
+    @input_filename = ''
+    @output_file = nil
     @output_dir = ''
-    @options = CfnDsl.PipelineOptions.new
+    @options = nil
     @template = nil
     class << self
       attr_accessor :input_filename, :output_dir, :options, :template, :output_filename
