@@ -13,7 +13,13 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 #
-
+require_relative 'cp-cfndsl'
+require_relative 'cp-cfn_nag'
+require_relative 'cp-options'
+require_relative 'cp-params'
+require_relative 'cp-syntax'
+require_relative 'monkey-patches'
+require_relative 'stdout-capture'
 
 require 'fileutils'
 # require 'json'
@@ -21,37 +27,31 @@ require 'fileutils'
 # require 'open-uri'
 
 
-module CfnDsl
+module CfnDslPipeline
   class Pipeline
-    @input_filename = ''
-    @output_file = nil
-    @output_dir = ''
-    @options = nil
-    @template = nil
-    class << self
-      attr_accessor :input_filename, :output_dir, :options, :template, :output_filename
-    end
 
-    def initialize (output_dir, options=false)
-      @options = options if options
+    attr_accessor :input_filename, :output_dir, :options, :template, :output_filename, :output_file, :syntax_report
 
+    def initialize (output_dir, options)
+      self.input_filename = ''
+      self.output_file = nil
+      self.template = nil
+      self.options = options || nil
+      self.syntax_report = []
       FileUtils.mkdir_p output_dir
       abort "Could not create output directory #{output_dir}" if Dir[output_dir] == nil
-      @output_dir = output_dir
+      self.output_dir = output_dir
     end
 
-    def build(input_filename,  cfndsl_extras: false)
-      abort "Input file #{input_filename} doesn't exist!" if !iFile.file?(input_filename)
-      @input_filename = input_filename
-      @output_filename = File.expand_path("#{@output_dir}/#{input_filename}.yaml")
-
+    def build(input_filename, cfndsl_extras)
+      puts self.options
+      abort "Input file #{input_filename}.rb doesn't exist!" if !File.file?("#{input_filename}.rb")
+      self.input_filename = "#{input_filename}"
+      self.output_filename = File.expand_path("#{self.output_dir}/#{input_filename}.yaml")
       exec_cfndsl cfndsl_extras
-
-      exec_syntax_validation @options.estimate_cost || @options.validate_syntax
-
-      exec_cfn_nag if linter
-      
-      exec_dump_params if dump_deploy_params
+      exec_syntax_validation if self.options.validate_syntax
+      exec_dump_params if self.options.dump_deploy_params
+      exec_cfn_nag if self.options.validate_cfn_nag
 
     end
   end
