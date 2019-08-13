@@ -3,7 +3,6 @@
 require 'optparse'
 
 require_relative '../lib/pipeline'
-
 require_relative '../lib/cfndsl'
 require_relative '../lib/cfn_nag'
 require_relative '../lib/options'
@@ -13,7 +12,7 @@ require_relative '../lib/monkey_patches'
 require_relative '../lib/stdout_capture'
 require_relative '../lib/version'
 
-USAGE = "Usage: #{File.basename(__FILE__)} -t|--template file -o|--output dir"
+USAGE = "Usage: #{File.basename(__FILE__)} -t input file -o dir [-b bucket|-s|-p|-n|-c] [include1 include2 etc]"
 cli_options = {}
 
 pipe_options = CfnDslPipeline::Options.new
@@ -67,11 +66,12 @@ unless cli_options[:template] && cli_options[:output]
   exit 1
 end
 
-cfndsl_extras = false
+cfndsl_extras = []
 ARGV.each do |arg|
   cfndsl_extras ||= [] << [:yaml, arg]
 end if ARGV.length > 0
 
+puts cfndsl_extras
 pipeline = CfnDslPipeline::Pipeline.new(cli_options[:output], pipe_options)
 pipeline.build(cli_options[:template], cfndsl_extras)
 
