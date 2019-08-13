@@ -16,7 +16,7 @@ module CfnDslPipeline
           file_results: audit_result
         }])
       end
-      audit_filename = "#{self.output_dir}/#{self.input_filename}.audit.txt"
+      audit_filename = "#{self.output_dir}/#{self.input_filename}.audit"
       puts "Audit results written to #{audit_filename}."
       File.open(File.expand_path(audit_filename), 'w').puts audit_report['stdout']
       if audit_result[:failure_count]>0

@@ -13,13 +13,14 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 #
-require_relative 'cp-cfndsl'
-require_relative 'cp-cfn_nag'
-require_relative 'cp-options'
-require_relative 'cp-params'
-require_relative 'cp-syntax'
-require_relative 'monkey-patches'
-require_relative 'stdout-capture'
+require 'cfndsl'
+require_relative 'cfndsl'
+require_relative 'cfn_nag'
+require_relative 'options'
+require_relative 'params'
+require_relative 'syntax'
+require_relative 'monkey_patches'
+require_relative 'stdout_capture'
 
 require 'fileutils'
 # require 'json'
@@ -44,8 +45,7 @@ module CfnDslPipeline
     end
 
     def build(input_filename, cfndsl_extras)
-      puts self.options
-      abort "Input file #{input_filename}.rb doesn't exist!" if !File.file?("#{input_filename}.rb")
+      abort "Input file #{input_filename}.rb doesn't exist!" if !File.file?("#{input_filename}")
       self.input_filename = "#{input_filename}"
       self.output_filename = File.expand_path("#{self.output_dir}/#{input_filename}.yaml")
       exec_cfndsl cfndsl_extras

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CfnDslPipeline
   class Options
     attr_accessor :aws_region, :validation_bucket, :validate_syntax, :validate_cfn_nag, :validate_output, :estimate_cost, :dump_deploy_params

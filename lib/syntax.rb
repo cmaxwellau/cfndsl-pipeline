@@ -55,7 +55,7 @@ module CfnDslPipeline
       report_filename = "#{self.output_dir}/#{self.input_filename}.report.yaml"
       puts "Syntax validation report written to #{report_filename}"
       File.open(File.expand_path(report_filename), 'w').puts self.syntax_report.to_hash.to_yaml
-    end    
+    end
 
     def upload_template(bucket, object_name)
       puts "Uploading template to temporary S3 bucket..."
@@ -67,7 +67,7 @@ module CfnDslPipeline
     def estimate_cost(bucket, object_name)
       puts "Estimate cost of template..."
       client = Aws::CloudFormation::Client.new(region: self.options.aws_region)
-      costing = client.estimate_template_cost({template_url: "https://#{bucket.url}/#{object_name}"})
+      costing = client.estimate_template_cost(template_url: "https://#{bucket.url}/#{object_name}")
       puts "Cost Calculator URL is: #{costing.url}"
     end
 
@@ -75,15 +75,14 @@ module CfnDslPipeline
       if self.options.validate_syntax
         puts "Validating template syntax in S3 Bucket..."
         client = Aws::CloudFormation::Client.new(region: self.options.aws_region)
-        client.validate_template({template_url: "https://s3.amazonaws.com/#{bucket.url}/#{object_name}"})
-      end    
+        client.validate_template(template_url: "https://s3.amazonaws.com/#{bucket.url}/#{object_name}")
+      end
     end
 
     def local_validate_syntax
       puts "Validating template syntax locally..."
       client = Aws::CloudFormation::Client.new(region: self.options.aws_region)
-      client.validate_template({template_body: self.template})
+      client.validate_template(template_body: self.template)
     end
   end
-
 end
