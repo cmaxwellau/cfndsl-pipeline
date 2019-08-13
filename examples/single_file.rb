@@ -21,7 +21,7 @@ options = CfnDslPipeline::Options.new
 
 cfndsl_extras =[
   [:yaml,'common_definitions.yaml'],
-  [:yaml,'standard_pipeline_tags.yaml'],
+  [:yaml,'standard_tags.yaml'],
   [:yaml,'file1_tags.yaml']
 ]
 

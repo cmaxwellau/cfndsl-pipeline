@@ -21,8 +21,8 @@ options = CfnDslPipeline::Options.new
 options.validation_bucket= 'my_cloudformation_bucket'
 
 includes =[
-  [:yaml,'common_definitions.yaml'],
-  [:yaml,'standard_pipeline_tags.yaml']
+  [:yaml,'includes/common_definitions.yaml'],
+  [:yaml,'includes/standard_tags.yaml']
 ]
 
 ['file1', 'file2'].each do |file|

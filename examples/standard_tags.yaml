@@ -1,0 +1,41 @@
+---
+
+TagStandard:
+  ServiceName:
+    Default: axt
+    Type: String
+    LogicalName: pServiceName
+    Label: Service pServiceName
+  EnvironmentID:
+    Default: dev1
+    AllowedPattern: (^dev|^sit|^prod)([-])?(\d{1,2})
+    Type: String
+    LogicalName: pEnvironmentID
+    Label: Environment ID
+  CostCentre:
+    Default: CC_DEVOPS
+    Type: String
+    LogicalName: pCostCentre
+    AllowedPattern: '[a-zA-Z0-9+-=._:/@ ]*'
+    Label: Cost Centre
+  Owner:
+    Default: 'Jane Doe'
+    Type: String
+    LogicalName: pOwner
+    Label: Owner
+  ApplicationID:
+    Default: CMDB-NS2010
+    Type: String
+    LogicalName: pApplicationID
+    Label:
+  AppCategory:
+    Default: B
+    Type: String
+    AllowedPattern: '[ABCD]'
+    LogicalName: pAppCategory
+    Label: Application Category
+  SupportGroup:
+    Default: 'DevOps Support'
+    Type: String
+    LogicalName: pSupportGroup
+    Label: Support Group

@@ -1,0 +1,63 @@
+---
+aws_regions:
+  eu-west-1: 3
+  eu-central-1: 2
+  ap-southeast-1: 2
+  ap-southeast-2: 3
+  ap-northeast-2: 2
+  ap-northeast-1: 3
+  us-east-1: 5
+  sa-east-1: 3
+  us-west-1: 3
+  us-west-2: 3
+
+aws_elb_principals:
+  us-east-1: '127311923021'
+  us-west-2: '797873946194'
+  us-west-1: '027434742980'
+  eu-west-1: '156460612806'
+  eu-central-1: '054676820928'
+  ap-southeast-1: '114774131450'
+  ap-northeast-1: '582318560864'
+  ap-southeast-2: '783225319266'
+  ap-northeast-2: '600734575887'
+  sa-east-1: '507241528517'
+
+defaults:
+  instance_profile_policy:
+  - Action:
+    - ec2:Describe*
+    Effect: Allow
+    Resource: "*"
+  - Effect: Allow
+    Action:
+    - cloudwatch:PutMetricData
+    Resource: "*"
+  - Effect: Allow
+    Action:
+    - logs:CreateLogGroup
+    - logs:CreateLogStream
+    - logs:DescribeLogGroups
+    - logs:DescribeLogStreams
+    - logs:PutLogEvents
+    Resource: "*"
+  allowed_instances:
+  - m4.large
+  
+protocols:
+  ssh:
+  - 22/tcp
+  oracledb:
+  - 1521/tcp
+  mssql:
+  - 1433/tcp
+  nfs:
+  - 111/tcp
+  - 2049/tcp
+  - 32768/tcp
+  - 44182/tcp
+  - 54508/tcp
+  - 111/udp
+  - 2049/udp
+  - 32768/udp
+  - 32770-32800/udp
