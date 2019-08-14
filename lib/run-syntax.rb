@@ -47,7 +47,7 @@ module CfnDslPipeline
         self.syntax_report = local_validate_syntax
       end
 
-      save_syntax_report
+      save_syntax_report if self.options.save_syntax_report
 
     end
 

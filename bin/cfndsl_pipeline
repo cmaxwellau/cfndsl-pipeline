@@ -33,6 +33,15 @@ op = OptionParser.new do |opts|
     pipe_options[:validate_cfn_nag] = false
   end
 
+  opts.on('--syntax-report', 'Save template syntax report') do
+    pipe_options[:save_syntax_report] = true
+  end
+
+
+  opts.on('--audit-report', 'Save cfn_nag audit report') do
+    pipe_options[:save_audit_report] = true
+  end  
+
   opts.on('-c', '--estimate', 'Generate URL for AWS simple cost calculator') do
     pipe_options[:validate_cfn_nag] = true
   end

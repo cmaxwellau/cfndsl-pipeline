@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency('aws-sdk-cloudformation', '1.25.0')
   s.add_dependency('aws-sdk-s3', '1.46.0')
   s.add_dependency('uuid', '2.3.9')
+  s.add_dependency('colorize', '0.8.1')
   s.bindir = 'bin'
   s.executables << 'cfndsl_pipeline'  
 end
