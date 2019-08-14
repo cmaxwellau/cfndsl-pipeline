@@ -31,7 +31,7 @@ require 'fileutils'
 module CfnDslPipeline
   class Pipeline
 
-    attr_accessor :input_filename, :output_dir, :options, :template, :output_filename, :output_file, :syntax_report
+    attr_accessor :input_filename, :output_dir, :options, :base_name, :template, :output_filename, :output_file, :syntax_report
 
     def initialize (output_dir, options)
       self.input_filename = ''
@@ -47,7 +47,8 @@ module CfnDslPipeline
     def build(input_filename, cfndsl_extras)
       abort "Input file #{input_filename}.rb doesn't exist!" if !File.file?("#{input_filename}")
       self.input_filename = "#{input_filename}"
-      self.output_filename = File.expand_path("#{self.output_dir}/#{input_filename}.yaml")
+      self.base_name = File.basename(input_filename, '.*')
+      self.output_filename = File.expand_path("#{self.output_dir}/#{self.base_name}.yaml")
       exec_cfndsl cfndsl_extras
       exec_syntax_validation if self.options.validate_syntax
       exec_dump_params if self.options.dump_deploy_params

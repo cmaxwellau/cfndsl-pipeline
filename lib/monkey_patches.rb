@@ -18,7 +18,7 @@ CfnDsl::CloudFormationTemplate.class_eval do
           send(prop, props[key]) if defined? props[key]
         end
       end
-    end
+    end if external_parameters[:TagStandard].kind_of?(Array)
   end
 end
 
@@ -31,32 +31,23 @@ module CfnDsl
     end
 
     def fix_substitutions(val)
-      meth = "fix_#{val.is_a?.downcase}"
+      return val unless defined? val.class.to_s.downcase
+      meth = "fix_#{val.class.to_s.downcase}"
       if respond_to?(meth.to_sym)
-        send(meth.to_sym)
-      else
-        val
+        return send(meth, val)
       end
-    end
-
-    # have to capture the types as the bools also meatch others
-
-    def fix_not(&val)
       val
     end
-    alias fix_trueclass  fix_not
-    alias fix_falseclass fix_not
-    alias fix_integer    fix_not
-    
-    def fix_hash(&val)
+
+    def fix_hash(val)
       val.transform_values! { |item| fix_substitutions item }
     end
 
-    def fix_array(&val)
+    def fix_array(val)
       val.map! { |item| fix_substitutions item }
     end
 
-    def fix_string(&val)
+    def fix_string(val)
       val.include?('${') ? FnSub(val) : val
     end
   end
@@ -73,7 +64,8 @@ module CfnDsl
       # begin
       external_parameters[:TagStandard].each do |tag_name, props|
         add_tag(tag_name.to_s, Ref(props['LogicalName'] || tag_name))
-      end
+      end if external_parameters[:TagStandard].kind_of?(Array)
+
       # rescue
       # end
     end

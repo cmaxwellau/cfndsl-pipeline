@@ -31,16 +31,16 @@ op = OptionParser.new do |opts|
     pipe_options[:validation_bucket] = v
   end
 
-  opts.on('-s', '--syntax', 'Enable syntax check') do
-    pipe_options[:validate_syntax] = true
+  opts.on('--disable-syntax', 'Enable syntax check') do
+    pipe_options[:validate_syntax] = false
   end
 
   opts.on('-p', '--params', 'Create cloudformation deploy compatible params file') do
     pipe_options[:dump_deploy_params] = true
   end
 
-  opts.on('-n', '--nag', 'Enable cfn_nag ') do
-    pipe_options[:validate_cfn_nag] = true
+  opts.on('--disable-nag', 'Enable cfn_nag ') do
+    pipe_options[:validate_cfn_nag] = false
   end
 
   opts.on('-c', '--estimate', 'Generate URL for AWS simple cost calculator') do
@@ -68,7 +68,7 @@ end
 
 cfndsl_extras = []
 ARGV.each do |arg|
-  cfndsl_extras ||= [] << [:yaml, arg]
+  cfndsl_extras << [:yaml, arg]
 end if ARGV.length > 0
 
 puts cfndsl_extras

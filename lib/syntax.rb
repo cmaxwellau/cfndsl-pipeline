@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'aws-sdk-cloudformation'
 require 'aws-sdk-s3' 
 require 'uuid'
@@ -52,7 +53,7 @@ module CfnDslPipeline
 
     private
     def save_syntax_report
-      report_filename = "#{self.output_dir}/#{self.input_filename}.report.yaml"
+      report_filename = "#{self.output_dir}/#{self.base_name}.report"
       puts "Syntax validation report written to #{report_filename}"
       File.open(File.expand_path(report_filename), 'w').puts self.syntax_report.to_hash.to_yaml
     end
