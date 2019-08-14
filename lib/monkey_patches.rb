@@ -7,7 +7,7 @@ PARAM_PROPS = %w[Description Default AllowedPattern AllowedValues].freeze
 # Automatically add Parameters for Tag values
 CfnDsl::CloudFormationTemplate.class_eval do
   def initialize
-    return unless defined? external_parameters[:TagStandard]
+    return unless defined? external_parameters[:TagStandard] 
 
     # parameters for tagging standard
     external_parameters[:TagStandard].each do |param_name, props|

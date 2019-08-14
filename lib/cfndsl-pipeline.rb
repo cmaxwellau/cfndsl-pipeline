@@ -14,19 +14,15 @@
 # language governing permissions and limitations under the License.
 #
 require 'cfndsl'
-require_relative 'cfndsl'
-require_relative 'cfn_nag'
+require 'fileutils'
+
 require_relative 'options'
 require_relative 'params'
-require_relative 'syntax'
 require_relative 'monkey_patches'
 require_relative 'stdout_capture'
-
-require 'fileutils'
-# require 'json'
-# require 'yaml'
-# require 'open-uri'
-
+require_relative 'run-cfndsl'
+require_relative 'run-cfn_nag'
+require_relative 'run-syntax'
 
 module CfnDslPipeline
   class Pipeline
@@ -45,7 +41,7 @@ module CfnDslPipeline
     end
 
     def build(input_filename, cfndsl_extras)
-      abort "Input file #{input_filename}.rb doesn't exist!" if !File.file?(input_filename)
+      abort "Input file #{input_filename} doesn't exist!" if !File.file?(input_filename)
       self.input_filename = "#{input_filename}"
       self.base_name = File.basename(input_filename, '.*')
       self.output_filename = File.expand_path("#{self.output_dir}/#{self.base_name}.yaml")
@@ -53,7 +49,6 @@ module CfnDslPipeline
       exec_syntax_validation if self.options.validate_syntax
       exec_dump_params if self.options.dump_deploy_params
       exec_cfn_nag if self.options.validate_cfn_nag
-
     end
   end
 end

@@ -16,12 +16,12 @@ Gem::Specification.new do |s|
   s.description = %q(Integrated CfnDsl CloudFormation template generation pipeline that integrates cfn_nag, AWS template validation, and AWS template costing (where possible), and generated `aws cloudformation deploy` compatible parameters files)
   s.license = 'MIT'
   s.files = [
-    'lib/pipeline.rb',
-    'lib/cfndsl.rb',
-    'lib/cfn_nag.rb',
+    'lib/cfndsl-pipeline.rb',
+    'lib/run-cfndsl.rb',
+    'lib/run-cfn_nag.rb',
+    'lib/run-syntax.rb',
     'lib/options.rb',
     'lib/params.rb',
-    'lib/syntax.rb',
     'lib/monkey_patches.rb',
     'lib/stdout_capture.rb',
     'lib/version.rb'

@@ -1,18 +1,8 @@
 #!/usr/bin/env ruby
-
 require 'optparse'
+require 'cfndsl-pipeline'
 
-require_relative '../lib/pipeline'
-require_relative '../lib/cfndsl'
-require_relative '../lib/cfn_nag'
-require_relative '../lib/options'
-require_relative '../lib/params'
-require_relative '../lib/syntax'
-require_relative '../lib/monkey_patches'
-require_relative '../lib/stdout_capture'
-require_relative '../lib/version'
-
-USAGE = "Usage: #{File.basename(__FILE__)} -t input file -o dir [-b bucket|-s|-p|-n|-c] [include1 include2 etc]"
+USAGE = "Usage: #{File.basename(__FILE__)} -t input file -o output dir [ -b bucket | -p | -c ] [include1 include2 etc]"
 cli_options = {}
 
 pipe_options = CfnDslPipeline::Options.new
