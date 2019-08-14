@@ -45,7 +45,7 @@ module CfnDslPipeline
     end
 
     def build(input_filename, cfndsl_extras)
-      abort "Input file #{input_filename}.rb doesn't exist!" if !File.file?("#{input_filename}")
+      abort "Input file #{input_filename}.rb doesn't exist!" if !File.file?(input_filename)
       self.input_filename = "#{input_filename}"
       self.base_name = File.basename(input_filename, '.*')
       self.output_filename = File.expand_path("#{self.output_dir}/#{self.base_name}.yaml")

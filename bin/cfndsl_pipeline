@@ -71,7 +71,6 @@ ARGV.each do |arg|
   cfndsl_extras << [:yaml, arg]
 end if ARGV.length > 0
 
-puts cfndsl_extras
 pipeline = CfnDslPipeline::Pipeline.new(cli_options[:output], pipe_options)
 pipeline.build(cli_options[:template], cfndsl_extras)
 
