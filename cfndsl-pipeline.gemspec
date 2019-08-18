@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   	"Cam Maxwell"
   ]
   s.homepage = 'https://github.com/cmaxwellau/cfndsl-pipeline.git'
+  s.authors ['Cam Maxwell']
   s.email = 'cameron.maxwell@gmail.com'
   s.version = CfnDslPipeline::VERSION
   s.date = %q(2019-08-13)
