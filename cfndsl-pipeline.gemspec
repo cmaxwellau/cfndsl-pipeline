@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
   	"Cam Maxwell"
   ]
   s.homepage = 'https://github.com/cmaxwellau/cfndsl-pipeline.git'
-  s.authors ['Cam Maxwell']
+  # s.author 'Cam Maxwell'
   s.email = 'cameron.maxwell@gmail.com'
   s.version = CfnDslPipeline::VERSION
-  s.date = %q(2019-08-13)
+  s.date = %q(2019-08-19)
   s.summary = %q(Integrated build pipeline for building CloudFormation with CfnDsl)
   s.description = %q(Integrated CfnDsl CloudFormation template generation pipeline that integrates cfn_nag, AWS template validation, and AWS template costing (where possible), and generated `aws cloudformation deploy` compatible parameters files)
   s.license = 'MIT'
