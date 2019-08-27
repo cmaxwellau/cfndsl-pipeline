@@ -1,8 +1,8 @@
-cfndsl-pipeline
-===
+# cfndsl-pipeline
+
 This ruby gem provides an integrated CfnDsl CloudFormation template generation pipeline that integrates resaource tagging standards, cfn_nag linting, AWS template syntax validation, and AWS template costing (where possible), and generates `aws cloudformation deploy` compatible parameter files.
 
-#Bash Usage:
+## Bash Usage:
 ```
 Usage: cfndsl_pipeline -t input file -o output dir [ -b bucket | -p | -c ] [include1 include2 etc]
     -t, --template file              Input file
@@ -19,7 +19,7 @@ Usage: cfndsl_pipeline -t input file -o output dir [ -b bucket | -p | -c ] [incl
 
 ```
 
-#Ruby Usage:
+## Ruby Usage
 ```require 'cfndsl-pipeline'
 
 opts = CfnDslPipeline::Options.new
@@ -40,7 +40,7 @@ pipeline.build(input_file, cfndsl_extras)
 ```
 
 
-#Tag standards
+## Tag standards
 These are implemented as a simple YAML file. CFNDSL has been extended to generate the appropriate template inputs for each tag key for you, as well as automatically tagging each and every resource that supports tags. All DSL properties of the parameters are supported, in addition to a logical name to use for the parameter key.
 
 ```
