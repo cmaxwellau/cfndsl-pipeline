@@ -2,6 +2,10 @@
 
 This ruby gem provides an integrated CfnDsl CloudFormation template generation pipeline that integrates resaource tagging standards, cfn_nag linting, AWS template syntax validation, and AWS template costing (where possible), and generates `aws cloudformation deploy` compatible parameter files.
 
+## Installation
+This gem is published on rubygems.org:
+``` gem install cfndsl-pipeline```
+
 ## Bash Usage:
 ```shell
 $ cfndsl_pipeline
