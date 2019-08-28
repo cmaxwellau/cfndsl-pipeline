@@ -3,6 +3,8 @@
 require 'cfndsl/globals'
 require 'cfndsl/version'
 PARAM_PROPS = %w[Description Default AllowedPattern AllowedValues].freeze
+HAS_PROPAGATABLE_TAGS = %w[CfnDsl::AWS::Types::AWS_AutoScaling_AutoScalingGroup].freeze
+HAS_MAPPED_TAGS = %w[CfnDsl::AWS::Types::AWS_Serverless_Function CfnDsl::AWS::Types::AWS_Serverless_SimpleTable CfnDsl::AWS::Types::AWS_Serverless_Application].freeze
 
 # Automatically add Parameters for Tag values
 CfnDsl::CloudFormationTemplate.class_eval do
@@ -48,12 +50,13 @@ module CfnDsl
       val.map! { |item| fix_substitutions item }
     end
 
+    ## TODO Need to add exclusion if string is already a propoerty of FnSub...
     def fix_string(val)
       val.include?('${') ? FnSub(val) : val
     end
   end
 
-  # Automatically apply Tag standard to  CfnDsl Resources (if supplied)
+  # Automatically apply resource tag standard to supported resources (if supplied)
   class ResourceDefinition
     def initialize
       apply_tag_standard
@@ -61,14 +64,24 @@ module CfnDsl
 
     def apply_tag_standard
       return unless defined? external_parameters[:TagStandard]
-
-      # begin
-      external_parameters[:TagStandard].each do |tag_name, props|
-        add_tag(tag_name.to_s, Ref(props['LogicalName'] || tag_name))
-      end if external_parameters[:TagStandard].kind_of?(Hash)
-
-      # rescue
-      # end
+      return unless external_parameters[:TagStandard].kind_of?(Hash)
+      resource_type = self.class.to_s
+      pp self
+      if defined? self.Tag
+        external_parameters[:TagStandard].each do |tag_name, props|
+          send(:Tag) do
+            Key tag_name.to_s
+            Value Ref(props['LogicalName'] || tag_name)
+            PropagateAtLaunch true if HAS_PROPAGATABLE_TAGS.include? resource_type
+          end
+        end
+      elsif HAS_MAPPED_TAGS.include? resource_type
+        tag_map = {}
+        external_parameters[:TagStandard].each do |tag_name, props| 
+          tag_map[tag_name.to_s] = Ref(props['LogicalName'] || tag_name)
+        end
+        Tags tag_map
+      end
     end
   end
 end
