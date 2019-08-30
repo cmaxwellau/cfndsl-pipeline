@@ -65,8 +65,9 @@ module CfnDsl
     def apply_tag_standard
       return unless defined? external_parameters[:TagStandard]
       return unless external_parameters[:TagStandard].kind_of?(Hash)
+
       resource_type = self.class.to_s
-      pp self
+
       if defined? self.Tag
         external_parameters[:TagStandard].each do |tag_name, props|
           send(:Tag) do
