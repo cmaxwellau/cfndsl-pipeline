@@ -2,14 +2,11 @@ require 'cfn-nag'
 require 'colorize'
 
 module CfnDslPipeline
+
   class Pipeline
     def exec_cfn_nag
       puts "Auditing template with cfn-nag..."
-      cfn_nag_config = CfnNagConfig.new(
-        print_suppression: false,
-        fail_on_warnings: true
-      )
-      cfn_nag = CfnNag.new(config: cfn_nag_config)
+      cfn_nag = CfnNag.new(config: self.options.cfn_nag)
       result = cfn_nag.audit(cloudformation_string: self.template)
       if self.options.save_audit_report
         audit_report = Capture.capture do
