@@ -25,14 +25,30 @@
 # 
 
 
+
 require 'cfndsl-pipeline'
 
-options = CfnDslPipeline::Options.new
+opts = CfnDslPipeline::Options.new
+# opts.validation_bucket		= 'cdsapipipeline-codebuildartifactsbucket-1iajuto6hoxe4'
+opts.validate_cfn_nag		= true
+opts.validate_syntax		= false
+opts.dump_deploy_params		= false
+opts.estimate_cost			= false
+opts.save_syntax_report		= false
+opts.save_audit_report		= false
+opts.debug_audit			= false
 
-cfndsl_extras =[
-  [:yaml,'common_definitions.yaml'],
-  [:yaml,'standard_tags.yaml'],
-  [:yaml,'file1_tags.yaml']
-]
+opts.cfn_nag = CfnNagConfig.new(
+	print_suppression: true, # Emit information when rules are supressed
+	allow_suppression: true, # Allow inline metadata to supress rules on a per-resource basis
+	fail_on_warnings: false, # This is up to you
+	blacklist_definition: IO.read('./cfn_nag_rules/rule_suppression.yaml'),
+	rule_directory: './cfn_nag_rules'
+)
 
-CfnDslPipeline::Pipeline.new('output_dir', options).build('file1', cfndsl_extras)
+output_dir='cfn'
+
+cfndsl_extras = [[:yaml, "standard_tags.yaml"]]
+pipeline=CfnDslPipeline::Pipeline.new(output_dir, opts)
+
+pipeline.build("s3bucket.rb", cfndsl_extras)

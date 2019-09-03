@@ -6,6 +6,8 @@ module CfnDslPipeline
   class Pipeline
     def exec_cfn_nag
       puts "Auditing template with cfn-nag..."
+      
+      CfnNagLogging.configure_logging({:debug => self.options.debug_audit})
       cfn_nag = CfnNag.new(config: self.options.cfn_nag)
       result = cfn_nag.audit(cloudformation_string: self.template)
       if self.options.save_audit_report
@@ -23,16 +25,14 @@ module CfnDslPipeline
         elsif result[:violations].count>0
           puts "Audit passed with #{result[:warning_count]} warnings.     (._.)  ".yellow
         else
-          puts "Audit passed!        \( ﾟヮﾟ)/      ヽ(´ー｀)ノ".green
+          puts "Audit passed!        ヽ( ﾟヮﾟ)/      ヽ(´ー｀)ノ".green
         end        
       else
         ColoredStdoutResults.new.render([{
           filename: "cfn-nag results:",
           file_results: result
         }]) 
-      end       
-
-
+      end
     end
   end
 end
