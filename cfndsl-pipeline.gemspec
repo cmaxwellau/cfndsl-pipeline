@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.required_ruby_version = '>= 2.4.1'
   s.add_dependency('cfn-nag', '0.4.35')
-  s.add_dependency('cfndsl', '0.17.0')
+  s.add_dependency('cfndsl', '~> 0.17')
   s.add_dependency('aws-sdk-cloudformation', '1.25.0')
   s.add_dependency('aws-sdk-s3', '1.46.0')
   s.add_dependency('uuid', '2.3.9')

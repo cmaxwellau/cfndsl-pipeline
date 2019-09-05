@@ -87,7 +87,7 @@ if pipe_options.save_syntax_report
   end  
 end
 
-if pipe_options.cfn_nag.rule_directory ||  pipe_options.cfn_nag.debug_audit || pipe_options.cfn_nag.save_audit_report
+if pipe_options.cfn_nag.rule_directory ||  pipe_options.debug_audit || pipe_options.save_audit_report
   unless pipe_options.validate_cfn_nag
     puts "Error: Audit options set, but audit was not enabled"
     puts op
