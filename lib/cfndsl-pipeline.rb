@@ -27,13 +27,13 @@
 require 'cfndsl'
 require 'fileutils'
 
+require_relative 'monkey-patches/cfndsl'
+require_relative 'monkey-patches/stdout_capture'
 require_relative 'options'
 require_relative 'params'
-require_relative 'monkey_patches'
-require_relative 'stdout_capture'
-require_relative 'run-cfndsl'
-require_relative 'run-cfn_nag'
-require_relative 'run-syntax'
+require_relative 'cfndsl'
+require_relative 'cfn-nag'
+require_relative 'syntax'
 
 module CfnDslPipeline
   class Pipeline
