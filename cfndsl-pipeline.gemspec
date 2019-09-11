@@ -20,12 +20,20 @@ Gem::Specification.new do |s|
   s.require_paths         = ["lib"]
   s.required_ruby_version = '>= 2.4.1'
   s.bindir                = 'bin'
+
   s.add_dependency('cfn-nag', '~> 0.4')
   s.add_dependency('cfndsl', '~> 0.17')
   s.add_dependency('aws-sdk-cloudformation', '~> 1')
   s.add_dependency('aws-sdk-s3', '~> 1')
   s.add_dependency('uuid', '~> 2.3')
   s.add_dependency('colorize', '~> 0.8')
-  s.executables << 'cfndsl_pipeline'  
+
+  s.executables << 'cfndsl_pipeline'
+
+  s.add_development_dependency "bundler", "~> 1.5"
+  s.add_development_dependency "rake"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "cfndsl"
+
 end
 

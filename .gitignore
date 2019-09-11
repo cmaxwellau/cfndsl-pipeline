@@ -2,4 +2,3 @@
 *.gem
 .bundle
 vendor
-build.sh
