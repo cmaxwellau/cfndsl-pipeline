@@ -1,4 +1,11 @@
 .ruby-gemset
 *.gem
-.bundle
+*~
+Gemfile.lock
+tmp/
+coverage/
+*.swp
+*.swo
 vendor
+.rspec_status
+
