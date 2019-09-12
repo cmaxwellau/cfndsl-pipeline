@@ -1,7 +1,9 @@
 # frozen_string_literal: true
-
 require 'cfndsl/globals'
 require 'cfndsl/version'
+require 'cfndsl/external_parameters'
+require 'cfndsl/aws/cloud_formation_template'
+
 PARAM_PROPS = %w[Description Default AllowedPattern AllowedValues].freeze
 HAS_PROPAGATABLE_TAGS = %w[CfnDsl::AWS::Types::AWS_AutoScaling_AutoScalingGroup].freeze
 HAS_MAPPED_TAGS = %w[CfnDsl::AWS::Types::AWS_Serverless_Function CfnDsl::AWS::Types::AWS_Serverless_SimpleTable CfnDsl::AWS::Types::AWS_Serverless_Application].freeze
@@ -26,6 +28,16 @@ CfnDsl::CloudFormationTemplate.class_eval do
 end
 
 module CfnDsl
+
+  # Add ability to reset params when being used in loops in rakefiles etc
+  class ExternalParameters
+    class << self
+      def reset
+        @parameters = self.class.defaults.clone
+      end
+    end
+  end
+
   # extends CfnDsl esource Properties to automatically substitute
   # FnSub recuraively
   class PropertyDefinition < JSONable
