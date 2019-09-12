@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'optparse'
-require 'cfndsl_pipeline'
+require 'cfndsl-pipeline'
 
 USAGE = "Usage: #{File.basename(__FILE__)} input file [ -o output_dir ] [ -b bucket ] OPTIONS [ include1 include2 etc.. ]"
 cli_options = {

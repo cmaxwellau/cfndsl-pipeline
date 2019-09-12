@@ -26,7 +26,7 @@ AllCops:
   Exclude:
     - 'tmp/**/*'
     - 'examples/**/*'
-    - 'spec/**/*'
+    - 'spec/*'
     - Gemfile
     - Guardfile
     - Rakefile
