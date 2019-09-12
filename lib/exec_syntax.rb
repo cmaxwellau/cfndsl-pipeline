@@ -1,17 +1,18 @@
 # frozen_string_literal: true
+
 require 'aws-sdk-cloudformation'
 require 'aws-sdk-s3'
 require 'uuid'
 
 module CfnDslPipeline
-  #
+  # Interface to AWS SDK syntax checks
   class Pipeline
     attr_accessor :s3_client
 
     def initialize
       self.s3_client = Aws::S3::Client.new(region: aws_region)
     end
-    # rubocop:disable Metrics/AbcSize
+
     def exec_syntax_validation
       puts 'Validating template syntax...'
       if options.estimate_cost || (output_file.size > 51_200)
@@ -31,7 +32,6 @@ module CfnDslPipeline
       end
       save_syntax_report
     end
-    # rubocop:enable Metrics/AbcSize
 
     private
 
@@ -51,6 +51,7 @@ module CfnDslPipeline
 
     def save_syntax_report
       return unless options.save_syntax_report
+
       report_filename = "#{output_dir}/#{base_name}.report"
       puts "Syntax validation report written to #{report_filename}"
       File.open(File.expand_path(report_filename), 'w').puts syntax_report.to_hash.to_yaml
@@ -65,6 +66,7 @@ module CfnDslPipeline
 
     def estimate_cost(bucket, object_name)
       return unless options.estimate_cost
+
       puts 'Estimate cost of template...'
       client = Aws::CloudFormation::Client.new(region: options.aws_region)
       costing = client.estimate_template_cost(template_url: "https://#{bucket.url}/#{object_name}")
@@ -73,6 +75,7 @@ module CfnDslPipeline
 
     def s3_validate_syntax(bucket, object_name)
       return unless options.validate_syntax
+
       puts 'Validating template syntax in S3 Bucket...'
       client = Aws::CloudFormation::Client.new(region: options.aws_region)
       client.validate_template(template_url: "https://s3.amazonaws.com/#{bucket.url}/#{object_name}")

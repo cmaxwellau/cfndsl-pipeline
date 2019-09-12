@@ -1,5 +1,6 @@
-#!/usr/bin/env ruby
-#
+# rubocop:disable Naming/FileName
+# frozen_string_literal: true
+
 # The MIT License
 #
 # Copyright (c) 2019 Cam Maxwell (cameron.maxwell@gmail.com)
@@ -53,7 +54,7 @@ module CfnDslPipeline
 
     def build(input_filename, cfndsl_extras)
       abort "Input file #{input_filename} doesn't exist!" unless File.file?(input_filename)
-      self.input_filename = "#{input_filename}"
+      self.input_filename = input_filename.to_s
       self.base_name = File.basename(input_filename, '.*')
       self.output_filename = File.expand_path("#{output_dir}/#{base_name}.yaml")
       exec_cfndsl cfndsl_extras
@@ -63,3 +64,4 @@ module CfnDslPipeline
     end
   end
 end
+# rubocop:enable Naming/FileName

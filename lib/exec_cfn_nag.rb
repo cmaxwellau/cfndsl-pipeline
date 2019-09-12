@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'cfn-nag'
 require 'logging'
 require 'colorize'
 
 module CfnDslPipeline
-  # Add cfn_nag functions to pipeline
+  # Interface to cfn_nag auditing
   class Pipeline
     def exec_cfn_nag
       puts 'Auditing template with cfn-nag...'
@@ -22,23 +24,28 @@ module CfnDslPipeline
     end
 
     def display_report(result)
-      ColoredStdoutResults.new.render([
-        {
-          filename: "#{@base_name}",
-          file_results: result
-        }
-      ])
+      ColoredStdoutResults.new.render(
+        [
+          {
+            filename: @base_name.to_s,
+            file_results: result
+          }
+        ]
+      )
     end
 
     def save_report(result)
       return unless options.save_audit_report
+
       report_data = Capture.capture do
-        SimpleStdoutResults.new.render([
-          {
-            filename: "#{@base_name}",
-            file_results: result
-          }
-        ])
+        SimpleStdoutResults.new.render(
+          [
+            {
+              filename: @base_name.to_s,
+              file_results: result
+            }
+          ]
+        )
       end
       filename = "#{output_dir}/#{base_name}.audit"
       File.open(File.expand_path(filename), 'w').puts report_data['stdout']
@@ -46,9 +53,9 @@ module CfnDslPipeline
     end
 
     def show_summary(result)
-      if result[:failure_count] > 0
+      if result[:failure_count].positive?
         puts "Audit failed. #{result[:failure_count]} error(s) found     ( ಠ ʖ̯ ಠ)  ".red
-      elsif result[:violations].count > 0
+      elsif result[:violations].positive?
         puts "Audit passed with #{result[:warning_count]} warnings.     (._.)  ".yellow
       else
         puts 'Audit passed!        ヽ( ﾟヮﾟ)/      ヽ(´ー｀)ノ'.green

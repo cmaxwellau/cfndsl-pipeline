@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 require 'shellwords'
 
 module CfnDslPipeline
-  #
+  # Dump stack parameters based on template
   class Pipeline
     def exec_dump_params
       param_filename = "#{output_dir}/#{base_name}.params"

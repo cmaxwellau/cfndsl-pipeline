@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
 
   s.executables << 'cfndsl_pipeline'
 
-  s.add_development_dependency "bundler", "~> 1.5"
+  s.add_development_dependency "bundler", "~> 2.0"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
   s.add_development_dependency "cfndsl"

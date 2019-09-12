@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 require 'optparse'
 
@@ -19,6 +20,7 @@ module CfnDslPipeline
 
     # rubocop:disable Metrics/AbcSize
     # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/BlockLength
     def parse
       @op = OptionParser.new do |opts|
         opts.banner = USAGE
@@ -86,15 +88,17 @@ module CfnDslPipeline
 
       # first non-dash parameter is the mandatory input file
       @template = ARGV.pop
-
+      # rubocop:disable Style/MultilineIfModifier
       ARGV.each do |arg|
         @cfndsl_extras << [:yaml, arg]
-      end if ARGV.length > 0
+      end unless ARGV.empty?
+      # rubocop:enable Style/MultilineIfModifier
 
       pipeline
     end
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/BlockLength
 
     def fatal(msg)
       puts msg

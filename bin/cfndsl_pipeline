@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require 'optparse'
 require 'cfndsl-pipeline'
 
@@ -8,7 +10,7 @@ cli_options = {
 }
 
 pipe_options = CfnDslPipeline::Options.new
-
+# rubocop:disable Metrics/BlockLength
 op = OptionParser.new do |opts|
   opts.banner = USAGE
 
@@ -66,6 +68,7 @@ op = OptionParser.new do |opts|
     exit
   end
 end
+# rubocop:enable Metrics/BlockLength
 
 op.parse!
 
@@ -106,7 +109,7 @@ end
 cfndsl_extras = []
 ARGV.each do |arg|
   cfndsl_extras << [:yaml, arg]
-end if ARGV.length > 0
+end
 
 pipeline = CfnDslPipeline::Pipeline.new(cli_options[:output], pipe_options)
 pipeline.build(cli_options[:template], cfndsl_extras)

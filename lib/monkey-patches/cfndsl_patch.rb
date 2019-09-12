@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'cfndsl/globals'
 require 'cfndsl/version'
 require 'cfndsl/external_parameters'
@@ -13,7 +14,7 @@ HAS_MAPPED_TAGS = %w([CfnDsl::AWS::Types::AWS_Serverless_Function CfnDsl::AWS::T
 # Automatically add Parameters for Tag values
 CfnDsl::CloudFormationTemplate.class_eval do
   def initialize
-    return unless defined? external_parameters[:TagStandard]
+    return unless external_parameters&.TagStandard && external_parameters[:TagStandard].is_a?(Hash)
 
     # parameters for tagging standard
     external_parameters[:TagStandard].each do |param_name, props|
@@ -25,7 +26,7 @@ CfnDsl::CloudFormationTemplate.class_eval do
           send(key, props[key]) if props[key]
         end
       end
-    end if external_parameters[:TagStandard].is_a?(Hash)
+    end
   end
 end
 
@@ -48,9 +49,10 @@ module CfnDsl
 
     def fix_substitutions(val)
       return val unless defined? val.class.to_s.downcase
-      meth = "fix_#{val.class.to_s.downcase}"
 
+      meth = "fix_#{val.class.to_s.downcase}"
       return send(meth, val) if respond_to?(meth.to_sym)
+
       val
     end
 
@@ -79,6 +81,7 @@ module CfnDsl
     def apply_tag_standard
       return unless defined? external_parameters[:TagStandard]
       return unless external_parameters[:TagStandard].is_a?(Hash)
+
       apply_tags(external_parameters[:TagStandard]) if defined? self.Tag
       apply_tags_map(external_parameters[:TagStandard]) if HAS_MAPPED_TAGS.include? self.class.to_s
     end
