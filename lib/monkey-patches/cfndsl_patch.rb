@@ -4,9 +4,11 @@ require 'cfndsl/version'
 require 'cfndsl/external_parameters'
 require 'cfndsl/aws/cloud_formation_template'
 
-PARAM_PROPS = %w[Description Default AllowedPattern AllowedValues].freeze
-HAS_PROPAGATABLE_TAGS = %w[CfnDsl::AWS::Types::AWS_AutoScaling_AutoScalingGroup].freeze
-HAS_MAPPED_TAGS = %w[CfnDsl::AWS::Types::AWS_Serverless_Function CfnDsl::AWS::Types::AWS_Serverless_SimpleTable CfnDsl::AWS::Types::AWS_Serverless_Application].freeze
+PARAM_PROPS = %w([Description Default AllowedPattern AllowedValues]).freeze
+HAS_PROPAGATABLE_TAGS = %w([CfnDsl::AWS::Types::AWS_AutoScaling_AutoScalingGroup]).freeze
+# rubocop:disable Metrics/LineLength
+HAS_MAPPED_TAGS = %w([CfnDsl::AWS::Types::AWS_Serverless_Function CfnDsl::AWS::Types::AWS_Serverless_SimpleTable CfnDsl::AWS::Types::AWS_Serverless_Application]).freeze
+# rubocop:enable Metrics/LineLength
 
 # Automatically add Parameters for Tag values
 CfnDsl::CloudFormationTemplate.class_eval do
@@ -23,12 +25,11 @@ CfnDsl::CloudFormationTemplate.class_eval do
           send(key, props[key]) if props[key]
         end
       end
-    end if external_parameters[:TagStandard].kind_of?(Hash)
+    end if external_parameters[:TagStandard].is_a?(Hash)
   end
 end
 
 module CfnDsl
-
   # Add ability to reset params when being used in loops in rakefiles etc
   class ExternalParameters
     class << self
@@ -48,9 +49,8 @@ module CfnDsl
     def fix_substitutions(val)
       return val unless defined? val.class.to_s.downcase
       meth = "fix_#{val.class.to_s.downcase}"
-      if respond_to?(meth.to_sym)
-        return send(meth, val)
-      end
+
+      return send(meth, val) if respond_to?(meth.to_sym)
       val
     end
 
@@ -74,27 +74,31 @@ module CfnDsl
       apply_tag_standard
     end
 
+    private
+
     def apply_tag_standard
       return unless defined? external_parameters[:TagStandard]
-      return unless external_parameters[:TagStandard].kind_of?(Hash)
+      return unless external_parameters[:TagStandard].is_a?(Hash)
+      apply_tags(external_parameters[:TagStandard]) if defined? self.Tag
+      apply_tags_map(external_parameters[:TagStandard]) if HAS_MAPPED_TAGS.include? self.class.to_s
+    end
 
-      resource_type = self.class.to_s
-
-      if defined? self.Tag
-        external_parameters[:TagStandard].each do |tag_name, props|
-          send(:Tag) do
-            Key tag_name.to_s
-            Value Ref(props['LogicalName'] || tag_name)
-            PropagateAtLaunch true if HAS_PROPAGATABLE_TAGS.include? resource_type
-          end
+    def apply_tags(tags)
+      tags.each do |tag_name, props|
+        send(:Tag) do
+          Key tag_name.to_s
+          Value Ref(props['LogicalName'] || tag_name)
+          PropagateAtLaunch true if HAS_PROPAGATABLE_TAGS.include? self.class.to_s
         end
-      elsif HAS_MAPPED_TAGS.include? resource_type
-        tag_map = {}
-        external_parameters[:TagStandard].each do |tag_name, props| 
-          tag_map[tag_name.to_s] = Ref(props['LogicalName'] || tag_name)
-        end
-        Tags tag_map
       end
+    end
+
+    def apply_tags_map(tags)
+      tag_map = {}
+      tags.each do |tag_name, props|
+        tag_map[tag_name.to_s] = Ref(props['LogicalName'] || tag_name)
+      end
+      Tags tag_map
     end
   end
 end

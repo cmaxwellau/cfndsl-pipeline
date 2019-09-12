@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 #
-# 
 # The MIT License
 #
 # Copyright (c) 2019 Cam Maxwell (cameron.maxwell@gmail.com)
@@ -22,44 +21,45 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-# 
+#
 
 require 'cfndsl'
+require 'cfn-nag'
 require 'fileutils'
 
-require_relative 'monkey-patches/cfndsl'
+require_relative 'monkey-patches/cfndsl_patch'
 require_relative 'monkey-patches/stdout_capture'
 require_relative 'options'
 require_relative 'params'
-require_relative 'cfndsl'
-require_relative 'cfn-nag'
-require_relative 'syntax'
+require_relative 'exec_cfndsl'
+require_relative 'exec_cfn_nag'
+require_relative 'exec_syntax'
 
 module CfnDslPipeline
+  # Main pipeline
   class Pipeline
-
     attr_accessor :input_filename, :output_dir, :options, :base_name, :template, :output_filename, :output_file, :syntax_report
 
-    def initialize (output_dir, options)
+    def initialize(output_dir, options)
       self.input_filename = ''
       self.output_file = nil
       self.template = nil
       self.options = options || nil
       self.syntax_report = []
       FileUtils.mkdir_p output_dir
-      abort "Could not create output directory #{output_dir}" if Dir[output_dir] == nil
+      abort "Could not create output directory #{output_dir}" unless Dir[output_dir]
       self.output_dir = output_dir
     end
 
     def build(input_filename, cfndsl_extras)
-      abort "Input file #{input_filename} doesn't exist!" if !File.file?(input_filename)
+      abort "Input file #{input_filename} doesn't exist!" unless File.file?(input_filename)
       self.input_filename = "#{input_filename}"
       self.base_name = File.basename(input_filename, '.*')
-      self.output_filename = File.expand_path("#{self.output_dir}/#{self.base_name}.yaml")
+      self.output_filename = File.expand_path("#{output_dir}/#{base_name}.yaml")
       exec_cfndsl cfndsl_extras
-      exec_syntax_validation if self.options.validate_syntax
-      exec_dump_params if self.options.dump_deploy_params
-      exec_cfn_nag if self.options.validate_cfn_nag
+      exec_syntax_validation if options.validate_syntax
+      exec_dump_params if options.dump_deploy_params
+      exec_cfn_nag if options.validate_cfn_nag
     end
   end
 end

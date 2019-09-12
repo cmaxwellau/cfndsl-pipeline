@@ -1,6 +1,6 @@
 require "bundler/setup"
 require "cfndsl"
-require "cfndsl-pipeline"
+require "cfndsl_pipeline"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

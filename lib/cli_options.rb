@@ -2,12 +2,13 @@
 require 'optparse'
 
 module CfnDslPipeline
+  # Command Line Options processing
   class CliOptions
     attr_accessor :output, :template, :pipeline, :cfndsl_extras, :op
 
     USAGE = "Usage: #{File.basename(__FILE__)} input file [ -o output_dir ] [ -b bucket ] OPTIONS [ include1 include2 etc.. ]"
 
-    def initialize()
+    def initialize
       @output = './'
       @cfndsl_extras = []
       @pipeline = CfnDslPipeline::Options.new
@@ -16,6 +17,8 @@ module CfnDslPipeline
 
     private
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def parse
       @op = OptionParser.new do |opts|
         opts.banner = USAGE
@@ -46,11 +49,11 @@ module CfnDslPipeline
 
         opts.on('--audit-rule-dir', 'cfn_nag audit custom rules directory') do
           pipeline.cfn_nag[:rule_directory] = true
-        end  
+        end
 
         opts.on('--audit-report', 'Save cfn_nag audit report') do
           pipeline.save_audit_report = true
-        end  
+        end
 
         opts.on('--audit-debug', 'Enable cfn_nag rule debug output') do
           pipeline.debug_audit = true
@@ -90,6 +93,8 @@ module CfnDslPipeline
 
       pipeline
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
 
     def fatal(msg)
       puts msg
@@ -97,19 +102,23 @@ module CfnDslPipeline
       exit 1
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/PerceivedComplexity
     def validate
-      # Exit on invalid option combinations 
-      fatal "Error: Input template file does not exist." unless @template && File.file?(@template)
+      # Exit on invalid option combinations
+      fatal 'Error: Input template file does not exist.' unless @template && File.file?(@template)
 
       if @pipeline.save_syntax_report
-        fatal "Error: save syntax report is set, but syntax validation was not enabled." unless @pipeline.validate_syntax
+        fatal 'Error: save syntax report is set, but syntax validation was not enabled.' unless @pipeline.validate_syntax && !@pipeline.save_syntax_report
       end
-
+      # rubocop:disable  Style/GuardClause
       if @pipeline.cfn_nag.rule_directory || @pipeline.debug_audit || @pipeline.save_audit_report
-        fatal "Error: Audit options set, but audit was not enabled" unless @pipeline.validate_cfn_nag
-        fatal "Error: cfn_nag rule directory does not exist" unless File.directory?(@pipeline.cfn_nag.rule_directory)
+        fatal 'Error: Audit options set, but audit was not enabled' unless @pipeline.validate_cfn_nag
+        fatal 'Error: cfn_nag rule directory does not exist' unless File.directory?(@pipeline.cfn_nag.rule_directory)
       end
+      # rubocop:enable  Style/GuardClause
     end
-
+    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/PerceivedComplexity
   end
 end
