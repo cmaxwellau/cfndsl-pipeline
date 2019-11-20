@@ -2,5 +2,5 @@
 
 # set release version
 module CfnDslPipeline
-  VERSION = '0.1.4'
+  VERSION = '0.1.5'
 end
