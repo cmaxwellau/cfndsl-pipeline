@@ -55,7 +55,7 @@ module CfnDslPipeline
     def show_summary(result)
       if result[:failure_count].positive?
         puts "Audit failed. #{result[:failure_count]} error(s) found     ( ಠ ʖ̯ ಠ)  ".red
-      elsif result[:violations].positive?
+      elsif result[:violations].count.positive?
         puts "Audit passed with #{result[:warning_count]} warnings.     (._.)  ".yellow
       else
         puts 'Audit passed!        ヽ( ﾟヮﾟ)/      ヽ(´ー｀)ノ'.green

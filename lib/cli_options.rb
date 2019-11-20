@@ -49,8 +49,8 @@ module CfnDslPipeline
           pipeline.validate_cfn_nag = false
         end
 
-        opts.on('--audit-rule-dir', 'cfn_nag audit custom rules directory') do
-          pipeline.cfn_nag[:rule_directory] = true
+        opts.on('--audit-rule-dir', 'cfn_nag audit custom rules directory') do |rule_dir|
+          pipeline.cfn_nag[:rule_directory] = rule_dir
         end
 
         opts.on('--audit-report', 'Save cfn_nag audit report') do

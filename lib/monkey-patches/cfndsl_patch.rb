@@ -14,7 +14,7 @@ HAS_MAPPED_TAGS = %w([CfnDsl::AWS::Types::AWS_Serverless_Function CfnDsl::AWS::T
 # Automatically add Parameters for Tag values
 CfnDsl::CloudFormationTemplate.class_eval do
   def initialize
-    return unless external_parameters&.TagStandard && external_parameters[:TagStandard].is_a?(Hash)
+    return unless external_parameters&.fetch(:TagStandard) && external_parameters[:TagStandard].is_a?(Hash)
 
     # parameters for tagging standard
     external_parameters[:TagStandard].each do |param_name, props|
